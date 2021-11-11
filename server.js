@@ -24,9 +24,9 @@ function start() {
                 "View all Departments",
                 "View all Roles",
                 "View all Employees",
-                "Add Employee",
-                "Add Role",
                 "Add Department",
+                "Add Role",
+                "Add Employee",
                 "Update Employee Role",
                 "Exit",
             ],
@@ -86,14 +86,25 @@ function viewDepartment() {
         start();
     });
 }
-function addEmployee() {
-    console.log("sucess");
-}
+function addEmployee() {}
 function addRole() {
     console.log("sucess");
 }
 function addDepartment() {
-    console.log("sucess");
+    inquirer
+        .prompt({
+            name: "departmentname",
+            type: "input",
+            message: "Enter the new department",
+        })
+        .then((answer) => {
+            let qry = "INSERT INTO department (dept_name) VALUES (?)";
+            db.query(qry, answer.departmentname, function (err, results) {
+                if (err) throw err;
+                console.table(results);
+                viewDepartment();
+            });
+        });
 }
 function updateEmployeerole() {
     console.log("sucess");
