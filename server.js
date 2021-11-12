@@ -80,15 +80,111 @@ function viewRoles() {
 }
 function viewDepartment() {
     let qry = "SELECT * FROM department";
-    db.query(qry, function (err, results) {
+    db.query(qry, (err, results) => {
         if (err) throw err;
         console.table(results);
+        // console.log(results.length);
         start();
     });
 }
-function addEmployee() {}
+// let deptArray = [];
+// function deptSelection() {
+//     let qry = "SELECT * FROM department";
+//     db.query =
+//         (qry,
+//         (err, results) => {
+//             let length = results.length;
+//             if (err) throw err;
+//             for (let i = 0; i < length; i++) {
+//                 deptArray.push(results[i].dept_name);
+//             }
+//             console.table(results);
+//         });
+//     return deptArray;
+//     //  console.log(deptArray);
+// }
+// const department = deptSelection();
+// console.log(department, "DEPARTMENT");
+//function roleSelection() {}
+//function managerSelection() {}
+function addEmployee() {
+    inquirer
+        .prompt([
+            {
+                name: "firstname",
+                type: "input",
+                message: "Enter the first name of employee",
+            },
+            {
+                name: "lastname",
+                type: "input",
+                message: "Enter the last name of employee",
+            },
+            {
+                name: "roleid",
+                type: "input",
+                message: "Enter your roleID",
+            },
+            {
+                name: "managerid",
+                type: "input",
+                message: "Enter Manager id if there is a manager",
+            },
+        ])
+        .then((answer) => {
+            let qry = "INSERT INTO employee(first_name,last_name,role_id,manager_id)VALUES(?,?,?,?)";
+            db.query(qry, [answer.firstname, answer.lastname, answer.roleid, answer.managerid], (err, results) => {
+                if (err) throw err;
+                console.log("NEW EMPLOYEE ADDED");
+                viewEmployee();
+            });
+        });
+}
+
 function addRole() {
-    console.log("sucess");
+    db.query("select * from department", (err, results) => {
+        if (err) throw err;
+
+        inquirer
+            .prompt([
+                {
+                    name: "roletitle",
+                    type: "input",
+                    message: "Enter the role title",
+                },
+                {
+                    name: "rolesalary",
+                    type: "input",
+                    message: "Enter role salary",
+                },
+                {
+                    name: "dept",
+                    type: "list",
+                    message: "Enter the depatment name ",
+                    choices: function () {
+                        var choiceArray = [];
+                        for (let i = 0; i < results.length; i++) {
+                            choiceArray.push(results[i].dept_name);
+                        }
+                        return choiceArray;
+                    },
+                },
+            ])
+            .then((answer) => {
+                let departmentname = answer.dept;
+                console.log(departmentname);
+                let deptid = choiceArray.indexof(departmentname);
+                console.log(deptid);
+
+                let qry = "INSERT INTO roles (role_title,salary,department_id) VALUES(?,?,?)";
+                db.query(qry, [answer.roletitle, answer.rolesalary, deptid], (err, results) => {
+                    if (err) throw err;
+                    console.log("NEW ROLE ADDED");
+                    console.table(results);
+                    viewRoles();
+                });
+            });
+    });
 }
 function addDepartment() {
     inquirer
@@ -99,16 +195,15 @@ function addDepartment() {
         })
         .then((answer) => {
             let qry = "INSERT INTO department (dept_name) VALUES (?)";
-            db.query(qry, answer.departmentname, function (err, results) {
+            db.query(qry, answer.departmentname, (err, results) => {
                 if (err) throw err;
-                console.table(results);
+                console.log("NEW DEPARTMENT ADDED ");
+                // console.table(results);
                 viewDepartment();
             });
         });
 }
-function updateEmployeerole() {
-    console.log("sucess");
-}
+function updateEmployeerole() {}
 function exitPrompt() {
     console.log("sucess");
 }

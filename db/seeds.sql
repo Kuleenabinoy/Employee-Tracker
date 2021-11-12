@@ -21,8 +21,8 @@ VALUES("INFORMATION TECHNOLOGY"),
   ("LOAN MANAGER",100000,5);
 
 INSERT INTO employee(first_name,last_name,role_id,manager_id)
-VALUES("JOHN","SMITH",1,20),
-("STEVE","M",1,21),
-("MARY","MERITA",5,31),
-("JENNY","RAY",4,10),
-("KYLE","TIM",1,20);
+VALUES("JOHN","SMITH",1,null),
+("STEVE","M",1,1),
+("MARY","MERITA",5,null),
+("JENNY","RAY",4,2),
+("KYLE","TIM",1,3);
