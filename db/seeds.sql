@@ -25,4 +25,4 @@ VALUES("JOHN","SMITH",1,null),
 ("STEVE","M",1,1),
 ("MARY","MERITA",5,null),
 ("JENNY","RAY",4,2),
-("KYLE","TIM",1,3);
+("KYLE","TIM",1,null);
