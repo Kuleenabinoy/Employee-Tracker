@@ -31,6 +31,10 @@ function start() {
                 "Delete Department",
                 "Delete Roles",
                 "Delete Employee",
+                "View Employees By Department",
+                "View Employees By Manager",
+                "Update Employee Mangers",
+                "Department Utilized Budget",
                 "Exit",
             ],
         })
@@ -59,10 +63,25 @@ function start() {
                     break;
                 case "Delete Department":
                     deleteDepartment();
+                    break;
                 case "Delete Roles":
                     deleteRole();
+                    break;
                 case "Delete Employee":
                     deleteEmployee();
+                    break;
+                case "View Employees By Department":
+                    viewBydept();
+                    break;
+                case "View Employess By Managers":
+                    viewBymanager();
+                    break;
+                case "Update Employee Mangers":
+                    updateManger();
+                    break;
+                case "Department Utilized Budget":
+                    departmentBudget();
+                    break;
                 case "Exit":
                     exitPrompt();
                     break;
@@ -363,6 +382,42 @@ function deleteEmployee() {
             });
     });
 }
+function viewBydept() {
+    let deptArray = [];
+    let qry = "select * from department";
+    db.query(qry, (err, results) => {
+        if (err) throw err;
+        inquirer
+            .prompt([
+                {
+                    name: "deptname",
+                    type: "list",
+                    message: "Select the department ,to view its Employees",
+                    choices: function () {
+                        for (let i = 0; i < results.length; i++) {
+                            deptArray.push(results[i].dept_name);
+                        }
+                        return deptArray;
+                    },
+                },
+            ])
+            .then((answer) => {
+                let deptid = deptArray.indexOf(answer.deptname) + 1;
+                console.log(deptid);
+                let qry1 =
+                    "Select employee.id,employee.first_name,employee.last_name,roles.salary,roles.role_title,department.dept_name from roles JOIN employee on employee.role_id=roles.id JOIN department on department.id=roles.department_id WHERE department.id=? ";
+                db.query(qry1, deptid, (err, results2) => {
+                    if (err) throw err;
+                    console.table(results2);
+                    start();
+                });
+            });
+    });
+}
+function viewBymanager() {}
+function updateManger() {}
+function departmentBudget() {}
 function exitPrompt() {
-    // db.end();
+    console.log("BYE.... use keys Control+c to exit ");
+    // db.end(); //command to end connection
 }
