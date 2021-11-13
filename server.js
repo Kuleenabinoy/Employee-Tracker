@@ -28,6 +28,9 @@ function start() {
                 "Add Role",
                 "Add Employee",
                 "Update Employee Role",
+                "Delete Department",
+                "Delete Roles",
+                "Delete Employee",
                 "Exit",
             ],
         })
@@ -54,6 +57,12 @@ function start() {
                 case "Update Employee Role":
                     updateEmployeerole();
                     break;
+                case "Delete Department":
+                    deleteDepartment();
+                case "Delete Roles":
+                    deleteRole();
+                case "Delete Employee":
+                    deleteEmployee();
                 case "Exit":
                     exitPrompt();
                     break;
@@ -271,7 +280,89 @@ function updateDetails(empid) {
     });
     // console.log(empid, "ID TO UPDATE");
 }
+function deleteDepartment() {
+    let deptArray = [];
+    let qry = "select * from department";
+    db.query(qry, (err, results) => {
+        if (err) throw err;
+        inquirer
+            .prompt([
+                {
+                    name: "dept",
+                    type: "list",
+                    message: "Select department to delete",
+                    choices: function () {
+                        for (let i = 0; i < results.length; i++) {
+                            deptArray.push(results[i].dept_name);
+                        }
+                        return deptArray;
+                    },
+                },
+            ])
+            .then((answer) => {
+                let deptid = deptArray.indexOf(answer.dept) + 1;
+                console.log(deptid);
+                let qry1 = "DELETE  FROM department WHERE id = ? ";
+                db.query(qry1, [deptid], (err, results2) => {
+                    if (err) throw err;
+                    console.log("DEPARTMENT DELETED");
 
+                    viewDepartment();
+                });
+            });
+    });
+}
+function deleteRole() {
+    inquirer
+        .prompt({
+            name: "role",
+            type: "input",
+            message: "Enter the roleID to delete",
+        })
+        .then((answer) => {
+            console.log(answer.role);
+            let qry1 = "DELETE FROM roles WHERE id=? ";
+            db.query(qry1, answer.role, (err, results1) => {
+                if (err) throw err;
+                console.log("ROLE DELETED");
+                viewRoles();
+            });
+        });
+    // });
+}
+function deleteEmployee() {
+    let empnameArray = [];
+
+    let qry = "SELECT * FROM employee";
+    db.query(qry, (err, results) => {
+        if (err) throw err;
+        inquirer
+            .prompt([
+                {
+                    name: "employeename",
+                    type: "list",
+                    message: "Select employee whose role is changing",
+                    choices: function () {
+                        for (let i = 0; i < results.length; i++) {
+                            empnameArray.push(results[i].id + "." + results[i].first_name + " " + results[i].last_name);
+                        }
+                        return empnameArray;
+                        // console.log(empnameArray);
+                    },
+                },
+            ])
+            .then((answer) => {
+                let empid = empnameArray.indexOf(answer.employeename) + 1;
+                console.log(empid);
+                let delqry = "DELETE FROM employee where id=?";
+                db.query(delqry, empid, (err, results2) => {
+                    if (err) throw err;
+                    console.log("EMPLOYEE DELETED");
+                    viewEmployee();
+                });
+            });
+    });
+}
 function exitPrompt() {
-    db.end();
+    // db.end();
 }
