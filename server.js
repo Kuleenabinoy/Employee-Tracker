@@ -11,7 +11,7 @@ const db = mysql.createConnection({
 
 db.connect((err) => {
     if (err) throw err;
-    console.log("Connnected to employee database");
+    // console.log("Connnected to employee database");
     start();
 });
 function start() {
@@ -87,54 +87,62 @@ function viewDepartment() {
         start();
     });
 }
-function selectRole() {}
-function selectManager() {}
-
 function addEmployee() {
     var roleArray = [];
-    var empArray = [null];
+    var empArray = [];
     let qry = "select * from roles";
     db.query(qry, (err, results) => {
         if (err) throw err;
-        inquirer
-            .prompt([
-                {
-                    name: "firstname",
-                    type: "input",
-                    message: "Enter the first name of employee",
-                },
-                {
-                    name: "lastname",
-                    type: "input",
-                    message: "Enter the last name of employee",
-                },
-                {
-                    name: "role",
-                    type: "list",
-                    message: "Enter your roleID",
-                    choices: function () {
-                        for (let i = 0; i < results.length; i++) {
-                            roleArray.push(results[i].role_title);
-                        }
-                        return roleArray;
+        let qry2 = "select * from employee";
+        db.query(qry2, (err, results2) => {
+            if (err) throw err;
+            inquirer
+                .prompt([
+                    {
+                        name: "firstname",
+                        type: "input",
+                        message: "Enter the first name of employee",
                     },
-                },
+                    {
+                        name: "lastname",
+                        type: "input",
+                        message: "Enter the last name of employee",
+                    },
+                    {
+                        name: "role",
+                        type: "list",
+                        message: "Enter your roleID",
+                        choices: function () {
+                            for (let i = 0; i < results.length; i++) {
+                                roleArray.push(results[i].role_title);
+                            }
+                            return roleArray;
+                        },
+                    },
+                    {
+                        name: "managerid",
+                        type: "list",
+                        message: "Enter Manager id if there is a manager",
+                        choices: function () {
+                            for (let j = 0; j < results2.length; j++) {
+                                empArray.push(results2[j].first_name);
+                            }
 
-                {
-                    name: "managerid",
-                    type: "input",
-                    message: "Enter Manager id if there is a manager",
-                },
-            ])
-            .then((answer) => {
-                let roleid = roleArray.indexOf(answer.role) + 1;
-                let qry = "INSERT INTO employee(first_name,last_name,role_id,manager_id)VALUES(?,?,?,?)";
-                db.query(qry, [answer.firstname, answer.lastname, roleid, answer.managerid], (err, results) => {
-                    if (err) throw err;
-                    console.log("NEW EMPLOYEE ADDED");
-                    viewEmployee();
+                            return empArray;
+                        },
+                    },
+                ])
+                .then((answer) => {
+                    let manager_id = empArray.indexOf(answer.managerid) + 1;
+                    let roleid = roleArray.indexOf(answer.role) + 1;
+                    let qry = "INSERT INTO employee(first_name,last_name,role_id,manager_id)VALUES(?,?,?,?)";
+                    db.query(qry, [answer.firstname, answer.lastname, roleid, manager_id], (err, results) => {
+                        if (err) throw err;
+                        console.log("NEW EMPLOYEE ADDED");
+                        viewEmployee();
+                    });
                 });
-            });
+        });
     });
 }
 
@@ -200,5 +208,5 @@ function addDepartment() {
 }
 function updateEmployeerole() {}
 function exitPrompt() {
-    console.log("sucess");
+    db.end();
 }
