@@ -62,7 +62,7 @@ function start() {
 }
 function viewEmployee() {
     let qry =
-        "SELECT employee.id,employee.first_name,employee.last_name, department.dept_name,roles.role_title,roles.salary,employee.manager_id  from roles JOIN employee on employee.role_id=roles.id JOIN department on department.id = roles.department_id ORDER BY employee.first_name ";
+        "SELECT employee.id,employee.first_name,employee.last_name, department.dept_name,roles.role_title,roles.salary,employee.manager_id  from roles JOIN employee on employee.role_id=roles.id JOIN department on department.id = roles.department_id ORDER BY employee.id";
     db.query(qry, function (err, results) {
         if (err) throw err;
         console.table(results);
@@ -87,39 +87,55 @@ function viewDepartment() {
         start();
     });
 }
+function selectRole() {}
+function selectManager() {}
 
 function addEmployee() {
-    inquirer
-        .prompt([
-            {
-                name: "firstname",
-                type: "input",
-                message: "Enter the first name of employee",
-            },
-            {
-                name: "lastname",
-                type: "input",
-                message: "Enter the last name of employee",
-            },
-            {
-                name: "roleid",
-                type: "input",
-                message: "Enter your roleID",
-            },
-            {
-                name: "managerid",
-                type: "input",
-                message: "Enter Manager id if there is a manager",
-            },
-        ])
-        .then((answer) => {
-            let qry = "INSERT INTO employee(first_name,last_name,role_id,manager_id)VALUES(?,?,?,?)";
-            db.query(qry, [answer.firstname, answer.lastname, answer.roleid, answer.managerid], (err, results) => {
-                if (err) throw err;
-                console.log("NEW EMPLOYEE ADDED");
-                viewEmployee();
+    var roleArray = [];
+    var empArray = [null];
+    let qry = "select * from roles";
+    db.query(qry, (err, results) => {
+        if (err) throw err;
+        inquirer
+            .prompt([
+                {
+                    name: "firstname",
+                    type: "input",
+                    message: "Enter the first name of employee",
+                },
+                {
+                    name: "lastname",
+                    type: "input",
+                    message: "Enter the last name of employee",
+                },
+                {
+                    name: "role",
+                    type: "list",
+                    message: "Enter your roleID",
+                    choices: function () {
+                        for (let i = 0; i < results.length; i++) {
+                            roleArray.push(results[i].role_title);
+                        }
+                        return roleArray;
+                    },
+                },
+
+                {
+                    name: "managerid",
+                    type: "input",
+                    message: "Enter Manager id if there is a manager",
+                },
+            ])
+            .then((answer) => {
+                let roleid = roleArray.indexOf(answer.role) + 1;
+                let qry = "INSERT INTO employee(first_name,last_name,role_id,manager_id)VALUES(?,?,?,?)";
+                db.query(qry, [answer.firstname, answer.lastname, roleid, answer.managerid], (err, results) => {
+                    if (err) throw err;
+                    console.log("NEW EMPLOYEE ADDED");
+                    viewEmployee();
+                });
             });
-        });
+    });
 }
 
 function addRole() {
@@ -152,6 +168,7 @@ function addRole() {
                 },
             ])
             .then((answer) => {
+                let departmentname = answer.dept;
                 let deptid = choiceArray.indexOf(departmentname) + 1;
                 // console.log(deptid);
                 let qry = "INSERT INTO roles (role_title,salary,department_id) VALUES(?,?,?)";
