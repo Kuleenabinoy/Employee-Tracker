@@ -183,7 +183,7 @@ function addRole() {
                 db.query(qry, [answer.roletitle, answer.rolesalary, deptid], (err, results) => {
                     if (err) throw err;
                     console.log("NEW ROLE ADDED");
-                    console.table(results);
+                    //  console.table(results);
                     viewRoles();
                 });
             });
@@ -206,7 +206,72 @@ function addDepartment() {
             });
         });
 }
-function updateEmployeerole() {}
+function updateEmployeerole() {
+    let empnameArray = [];
+
+    let qry = "SELECT * FROM employee";
+    db.query(qry, (err, results) => {
+        if (err) throw err;
+        inquirer
+            .prompt([
+                {
+                    name: "employeename",
+                    type: "list",
+                    message: "Select employee whose role is changing",
+                    choices: function () {
+                        for (let i = 0; i < results.length; i++) {
+                            empnameArray.push(results[i].id + "." + results[i].first_name + " " + results[i].last_name);
+                        }
+                        return empnameArray;
+                        // console.log(empnameArray);
+                    },
+                },
+            ])
+            .then((answer) => {
+                let empid = empnameArray.indexOf(answer.employeename) + 1;
+                console.log(empid);
+                updateDetails(empid);
+                // let newrole = answer.roletitle;
+                // console.log(newrole);
+            });
+    });
+}
+function updateDetails(empid) {
+    let roleArray2 = [];
+    let qry2 = "select * from roles";
+    db.query(qry2, (err, results2) => {
+        if (err) throw err;
+        inquirer
+            .prompt([
+                {
+                    name: "roletitle",
+                    type: "list",
+                    message: "Select the new role ",
+                    choices: function () {
+                        for (let j = 0; j < results2.length; j++) {
+                            roleArray2.push(results2[j].role_title);
+                        }
+                        return roleArray2;
+                    },
+                },
+            ])
+            .then((answer) => {
+                let newrole = answer.roletitle;
+                let roleid = roleArray2.indexOf(newrole) + 1;
+                //console.log(newrole);
+                //   console.log(roleid);
+                let qry = "UPDATE employee SET role_id = ? WHERE employee.id=?";
+                db.query(qry, [roleid, empid], (err, results) => {
+                    if (err) throw err;
+                    console.log("Employee Role Updated");
+                    console.table(results);
+                    viewEmployee();
+                });
+            });
+    });
+    // console.log(empid, "ID TO UPDATE");
+}
+
 function exitPrompt() {
     db.end();
 }
