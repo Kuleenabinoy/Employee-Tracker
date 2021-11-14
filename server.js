@@ -18,7 +18,7 @@ function start() {
     inquirer
         .prompt({
             name: "action",
-            type: "list",
+            type: "rawlist",
             message: "What would you like to do?",
             choices: [
                 "View all Departments",
@@ -469,11 +469,13 @@ function departmentBudget() {
             ])
             .then((answer) => {
                 let deptid = deptArray.indexOf(answer.deptname) + 1;
+                let dept_name = answer.deptname;
                 console.log(deptid);
-                let qry2 =
-                    "SELECT department.dept_name,SUM(roles.salary) FROM roles JOIN department WHERE roles.department_id=department.id ";
+                let qry2 = "Select  sum(salary) AS BUDGET from roles   WHERE department_id=?  ";
+                // "SELECT department.dept_name,]]sum(roles.salary) AS Salary FROM roles JOIN department on roles.department_id=department.id  GROUP BY department.id=?";
                 db.query(qry2, deptid, (err, results2) => {
                     if (err) throw err;
+                    console.log(`The Budget Of ${dept_name}`);
                     console.table(results2);
                     start();
                 });
