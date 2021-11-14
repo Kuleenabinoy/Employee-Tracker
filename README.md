@@ -3,6 +3,21 @@
 ## Description
 
 Content Management System to track Employee Details,Department Details and details of Role.
+The programs performs the following options 1. View all Departments
+2.View all Roles
+3.View all Employees
+4.Add Department
+5.Add Role
+6.Add Employee
+7.Update Employee Role
+8.Delete Department
+9.Delete Roles
+10.Delete Employee
+11.View Employees By Department
+12.View Employees By Manager
+13.Update Employee Mangers
+14.Departments Utilized Budget
+15.Exit
 
 ## UserStory
 
@@ -57,10 +72,10 @@ HTML,CSS,Javascript,Nodejs ,MYSQL,GitHub
 ```
 
 ## ScreenShots
+
 VIEW OPTION
 ![Screenshot 2021-11-14 14 37 52](https://user-images.githubusercontent.com/86656634/141666449-7ff7113d-3fde-4132-b009-b4999be078b9.png)
 ADD OPTION
 ![Screenshot 2021-11-14 14 41 03](https://user-images.githubusercontent.com/86656634/141666531-abe77a47-8c57-4fd4-8f0b-65db446617d2.png)
-
 
 ## ViedoLinks

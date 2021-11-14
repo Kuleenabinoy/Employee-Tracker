@@ -257,7 +257,7 @@ function updateEmployeerole() {
             ])
             .then((answer) => {
                 let empid = empnameArray.indexOf(answer.employeename) + 1;
-                console.log(empid);
+                //  console.log(empid);
                 updateDetails(empid);
                 // let newrole = answer.roletitle;
                 // console.log(newrole);
@@ -320,7 +320,7 @@ function deleteDepartment() {
             ])
             .then((answer) => {
                 let deptid = deptArray.indexOf(answer.dept) + 1;
-                console.log(deptid);
+                // console.log(deptid);
                 let qry1 = "DELETE  FROM department WHERE id = ? ";
                 db.query(qry1, [deptid], (err, results2) => {
                     if (err) throw err;
@@ -339,7 +339,7 @@ function deleteRole() {
             message: "Enter the roleID to delete",
         })
         .then((answer) => {
-            console.log(answer.role);
+            //console.log(answer.role);
             let qry1 = "DELETE FROM roles WHERE id=? ";
             db.query(qry1, answer.role, (err, results1) => {
                 if (err) throw err;
@@ -372,7 +372,7 @@ function deleteEmployee() {
             ])
             .then((answer) => {
                 let empid = empnameArray.indexOf(answer.employeename) + 1;
-                console.log(empid);
+                // console.log(empid);
                 let delqry = "DELETE FROM employee where id=?";
                 db.query(delqry, empid, (err, results2) => {
                     if (err) throw err;
@@ -403,7 +403,7 @@ function viewBydept() {
             ])
             .then((answer) => {
                 let deptid = deptArray.indexOf(answer.deptname) + 1;
-                console.log(deptid);
+                // console.log(deptid);
                 let qry1 =
                     "Select employee.id,employee.first_name,employee.last_name,roles.salary,roles.role_title,department.dept_name from roles JOIN employee on employee.role_id=roles.id JOIN department on department.id=roles.department_id WHERE department.id=? ";
                 db.query(qry1, deptid, (err, results2) => {
@@ -435,7 +435,7 @@ function viewBymanager() {
             ])
             .then((answer) => {
                 let managerid = managerArray.indexOf(answer.manager) + 1;
-                console.log(managerid);
+                //  console.log(managerid);
                 let qry1 = "SELECT first_name,last_name,manager_id from employee where manager_id=?";
                 db.query(qry1, managerid, (err, results2) => {
                     if (err) throw err;
@@ -470,9 +470,9 @@ function departmentBudget() {
             .then((answer) => {
                 let deptid = deptArray.indexOf(answer.deptname) + 1;
                 let dept_name = answer.deptname;
-                console.log(deptid);
+                // console.log(deptid);
                 let qry2 = "Select  sum(salary) AS BUDGET from roles   WHERE department_id=?  ";
-                // "SELECT department.dept_name,]]sum(roles.salary) AS Salary FROM roles JOIN department on roles.department_id=department.id  GROUP BY department.id=?";
+
                 db.query(qry2, deptid, (err, results2) => {
                     if (err) throw err;
                     console.log(`The Budget Of ${dept_name}`);
@@ -483,6 +483,6 @@ function departmentBudget() {
     });
 }
 function exitPrompt() {
-    console.log("BYE.... use keys Control+c to exit ");
-    // db.end(); //command to end connection
+    //console.log("BYE.... Use Keys Control+c to exit ");
+    db.end(); //command to end connection
 }
