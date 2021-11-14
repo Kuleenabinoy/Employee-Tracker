@@ -34,7 +34,7 @@ function start() {
                 "View Employees By Department",
                 "View Employees By Manager",
                 "Update Employee Mangers",
-                "Department Utilized Budget",
+                "Departments Utilized Budget",
                 "Exit",
             ],
         })
@@ -79,7 +79,7 @@ function start() {
                 case "Update Employee Mangers":
                     updateManger();
                     break;
-                case "Department Utilized Budget":
+                case "Departments Utilized Budget":
                     departmentBudget();
                     break;
                 case "Exit":
@@ -445,8 +445,41 @@ function viewBymanager() {
             });
     });
 }
-function updateManger() {}
-function departmentBudget() {}
+function updateManger() {
+    console.log("Manager Update"); //to to
+}
+function departmentBudget() {
+    let deptArray = [];
+    let qry = "select * from department";
+    db.query(qry, (err, results) => {
+        if (err) throw err;
+        inquirer
+            .prompt([
+                {
+                    name: "deptname",
+                    type: "list",
+                    message: "Select the department ,to view its utilized budget",
+                    choices: function () {
+                        for (let i = 0; i < results.length; i++) {
+                            deptArray.push(results[i].dept_name);
+                        }
+                        return deptArray;
+                    },
+                },
+            ])
+            .then((answer) => {
+                let deptid = deptArray.indexOf(answer.deptname) + 1;
+                console.log(deptid);
+                let qry2 =
+                    "SELECT department.dept_name,SUM(roles.salary) FROM roles JOIN department WHERE roles.department_id=department.id ";
+                db.query(qry2, deptid, (err, results2) => {
+                    if (err) throw err;
+                    console.table(results2);
+                    start();
+                });
+            });
+    });
+}
 function exitPrompt() {
     console.log("BYE.... use keys Control+c to exit ");
     // db.end(); //command to end connection
