@@ -57,6 +57,10 @@ HTML,CSS,Javascript,Nodejs ,MYSQL,GitHub
 ```
 
 ## ScreenShots
+VIEW OPTION
 ![Screenshot 2021-11-14 14 37 52](https://user-images.githubusercontent.com/86656634/141666449-7ff7113d-3fde-4132-b009-b4999be078b9.png)
+ADD OPTION
+![Screenshot 2021-11-14 14 41 03](https://user-images.githubusercontent.com/86656634/141666531-abe77a47-8c57-4fd4-8f0b-65db446617d2.png)
+
 
 ## ViedoLinks
