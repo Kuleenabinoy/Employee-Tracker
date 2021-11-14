@@ -73,7 +73,7 @@ function start() {
                 case "View Employees By Department":
                     viewBydept();
                     break;
-                case "View Employess By Managers":
+                case "View Employees By Manager":
                     viewBymanager();
                     break;
                 case "Update Employee Mangers":
@@ -414,7 +414,37 @@ function viewBydept() {
             });
     });
 }
-function viewBymanager() {}
+function viewBymanager() {
+    let managerArray = [];
+    let qry = "SELECT * FROM employee Where manager_id >=0";
+    db.query(qry, (err, results) => {
+        if (err) throw err;
+        inquirer
+            .prompt([
+                {
+                    name: "manager",
+                    type: "list",
+                    message: "Select the manager",
+                    choices: function () {
+                        for (let i = 0; i < results.length; i++) {
+                            managerArray.push(results[i].manager_id);
+                        }
+                        return managerArray;
+                    },
+                },
+            ])
+            .then((answer) => {
+                let managerid = managerArray.indexOf(answer.manager) + 1;
+                console.log(managerid);
+                let qry1 = "SELECT first_name,last_name,manager_id from employee where manager_id=?";
+                db.query(qry1, managerid, (err, results2) => {
+                    if (err) throw err;
+                    console.table(results2);
+                    start();
+                });
+            });
+    });
+}
 function updateManger() {}
 function departmentBudget() {}
 function exitPrompt() {
