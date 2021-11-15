@@ -446,7 +446,7 @@ function viewBymanager() {
     });
 }
 function updateManger() {
-    console.log("Manager Update"); //to to
+    console.log("Manager Update"); //to do
 }
 function departmentBudget() {
     let deptArray = [];
