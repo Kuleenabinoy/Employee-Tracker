@@ -83,11 +83,8 @@ ADD OPTION
 ## ViedoLinks
 
 MY SQL:
-
 https://watch.screencastify.com/v/oJf1Ev6QnyrM9F6Xonih
 
-1-7 OPTIONS
-https://watch.screencastify.com/v/FxtngS2NEPRc5LMi8Sr8
+1-15 options:
 
-8- 15 OPTIONS
-https://watch.screencastify.com/v/jQjNTdvs3XaF9qZWGSiT
+https://watch.screencastify.com/v/B1nBCKlJTJd0pA3rY3O7
