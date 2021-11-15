@@ -1,7 +1,7 @@
 const mysql = require("mysql2");
 const inquirer = require("inquirer");
 const consoleTable = require("console.table");
-
+//creating connection
 const db = mysql.createConnection({
     host: "localhost",
     user: "root",
@@ -14,6 +14,7 @@ db.connect((err) => {
     // console.log("Connnected to employee database");
     start();
 });
+//function to display choices
 function start() {
     inquirer
         .prompt({
@@ -88,6 +89,7 @@ function start() {
             }
         });
 }
+//function to view employee details
 function viewEmployee() {
     let qry =
         "SELECT employee.id,employee.first_name,employee.last_name, department.dept_name,roles.role_title,roles.salary,employee.manager_id  from roles JOIN employee on employee.role_id=roles.id JOIN department on department.id = roles.department_id ORDER BY employee.id";
@@ -97,6 +99,7 @@ function viewEmployee() {
         start();
     });
 }
+//view roles
 function viewRoles() {
     let qry =
         "SELECT roles.id AS RoleID,roles.role_title AS JOB_TITLE,department.dept_name AS Department_Name,roles.salary AS Salary from roles JOIN department ON roles.department_id=department.id ORDER BY roles.id";
@@ -106,6 +109,7 @@ function viewRoles() {
         start();
     });
 }
+//view department
 function viewDepartment() {
     let qry = "SELECT * FROM department";
     db.query(qry, (err, results) => {
@@ -115,6 +119,7 @@ function viewDepartment() {
         start();
     });
 }
+//Add employee
 function addEmployee() {
     var roleArray = [];
     var empArray = [];
@@ -173,7 +178,7 @@ function addEmployee() {
         });
     });
 }
-
+//add role
 function addRole() {
     var choiceArray = [];
     db.query("select * from department", (err, results) => {
@@ -217,6 +222,7 @@ function addRole() {
             });
     });
 }
+//ADD department
 function addDepartment() {
     inquirer
         .prompt({
@@ -234,6 +240,7 @@ function addDepartment() {
             });
         });
 }
+//UPDATE EMPLOYEE role
 function updateEmployeerole() {
     let empnameArray = [];
 
@@ -264,6 +271,7 @@ function updateEmployeerole() {
             });
     });
 }
+//UPDATE DETAILS
 function updateDetails(empid) {
     let roleArray2 = [];
     let qry2 = "select * from roles";
@@ -298,7 +306,7 @@ function updateDetails(empid) {
             });
     });
     // console.log(empid, "ID TO UPDATE");
-}
+} //DELETE DEPARTMENT
 function deleteDepartment() {
     let deptArray = [];
     let qry = "select * from department";
@@ -330,7 +338,7 @@ function deleteDepartment() {
                 });
             });
     });
-}
+} //DELETE ROLE
 function deleteRole() {
     inquirer
         .prompt({
@@ -348,7 +356,7 @@ function deleteRole() {
             });
         });
     // });
-}
+} //DELETE EMPLOYEE
 function deleteEmployee() {
     let empnameArray = [];
 
@@ -382,6 +390,7 @@ function deleteEmployee() {
             });
     });
 }
+//VIEWEMPLOYEEBY DEPARTMENT
 function viewBydept() {
     let deptArray = [];
     let qry = "select * from department";
@@ -414,6 +423,7 @@ function viewBydept() {
             });
     });
 }
+//VIEW BY MANAGER
 function viewBymanager() {
     let managerArray = [];
     let qry = "SELECT * FROM employee Where manager_id >=0";
@@ -445,9 +455,12 @@ function viewBymanager() {
             });
     });
 }
+//UPDATE MANAGER
 function updateManger() {
     console.log("Manager Update"); //to do
+    start();
 }
+//SHOW DEPARTMENTBUDGET
 function departmentBudget() {
     let deptArray = [];
     let qry = "select * from department";

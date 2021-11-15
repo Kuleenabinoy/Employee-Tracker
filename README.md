@@ -86,5 +86,4 @@ MY SQL:
 https://watch.screencastify.com/v/oJf1Ev6QnyrM9F6Xonih
 
 1-15 options:
-
 https://watch.screencastify.com/v/B1nBCKlJTJd0pA3rY3O7
